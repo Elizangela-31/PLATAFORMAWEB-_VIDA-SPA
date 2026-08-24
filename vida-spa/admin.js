@@ -1,3 +1,9 @@
+// ==========================================
+// ADMIN.JS - VERSIÓN CORREGIDA
+// ==========================================
+
+console.log("🚀🚀🚀 ADMIN.JS SE ESTÁ EJECUTANDO 🚀🚀🚀");
+
 import { auth, db } from "./firebase-config.js";
 import {
   signInWithEmailAndPassword,
@@ -6,47 +12,86 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import {
   collection,
-  query,
-  orderBy,
-  onSnapshot,
+  getDocs,
   doc,
   updateDoc,
-  deleteDoc  // 👈 NUEVO: para eliminar
+  deleteDoc,
+  orderBy,
+  query
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
-const loginSection = document.getElementById("login-section");
-const panelSection = document.getElementById("panel-section");
-const loginForm = document.getElementById("login-form");
-const loginError = document.getElementById("login-error");
-const logoutButton = document.getElementById("logout-btn");
-const solicitudesGrid = document.getElementById("solicitudes-grid");
-const panelEmpty = document.getElementById("panel-empty");
-
-let unsubscribeCitas = null;
+console.log("✅ Imports completados");
 
 // ==========================================
-// LOGIN / LOGOUT
+// ELEMENTOS DEL DOM - CON VERIFICACIÓN
 // ==========================================
 
-loginForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  loginError.classList.add("hidden");
-
-  const correo = document.getElementById("admin-correo").value.trim();
-  const clave = document.getElementById("admin-clave").value;
-
-  try {
-    await signInWithEmailAndPassword(auth, correo, clave);
-    loginForm.reset();
-  } catch (error) {
-    loginError.textContent = "Correo o clave incorrectos.";
-    loginError.classList.remove("hidden");
+function getElement(id) {
+  const el = document.getElementById(id);
+  if (!el) {
+    console.error(`❌ Elemento "${id}" no encontrado en el HTML`);
   }
-});
+  return el;
+}
 
-logoutButton.addEventListener("click", () => {
-  signOut(auth);
-});
+const loginSection = getElement("login-section");
+const panelSection = getElement("panel-section");
+const loginForm = getElement("login-form");
+const loginError = getElement("login-error");
+const logoutButton = getElement("logout-btn");
+const solicitudesGrid = getElement("solicitudes-grid");
+const panelEmpty = getElement("panel-empty");
+
+// ==========================================
+// LOGIN
+// ==========================================
+
+if (loginForm) {
+  loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    console.log("📝 Botón INGRESAR presionado");
+    
+    if (loginError) loginError.classList.add("hidden");
+
+    const correoInput = document.getElementById("admin-correo");
+    const claveInput = document.getElementById("admin-clave");
+    
+    if (!correoInput || !claveInput) {
+      console.error("❌ Inputs de login no encontrados");
+      return;
+    }
+
+    const correo = correoInput.value.trim();
+    const clave = claveInput.value;
+
+    console.log("🔐 Intentando login con:", correo);
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, correo, clave);
+      console.log("✅ Login exitoso:", userCredential.user.email);
+      loginForm.reset();
+    } catch (error) {
+      console.error("❌ Error de login:", error.code, error.message);
+      if (loginError) {
+        loginError.textContent = "Correo o clave incorrectos.";
+        loginError.classList.remove("hidden");
+      }
+    }
+  });
+} else {
+  console.error("❌ Formulario de login no encontrado");
+}
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+if (logoutButton) {
+  logoutButton.addEventListener("click", () => {
+    console.log("🔓 Cerrando sesión");
+    signOut(auth);
+  });
+}
 
 // ==========================================
 // UTILIDADES
@@ -57,8 +102,8 @@ function money(n) {
 }
 
 function whatsappHref(data) {
-  const telefonoLimpio = data.telefono.replace(/\D/g, "").replace(/^0/, "");
-  const mensaje = `Hola ${data.nombre}, te escribo de VIDA SPA por tu cita de "${data.interes}".`;
+  const telefonoLimpio = data.telefono ? data.telefono.replace(/\D/g, "").replace(/^0/, "") : "0999999999";
+  const mensaje = `Hola ${data.nombre || "cliente"}, te escribo de VIDA SPA por tu cita de "${data.interes || "servicio"}".`;
   return `https://wa.me/593${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
 }
 
@@ -66,34 +111,34 @@ function whatsappHref(data) {
 // ELIMINAR CITA
 // ==========================================
 
-function eliminarCita(id) {
-  if (!confirm('¿Estás seguro de eliminar esta cita permanentemente?')) return;
+async function eliminarCita(id) {
+  if (!confirm('¿Eliminar esta cita permanentemente?')) return;
   
-  deleteDoc(doc(db, "citas", id))
-    .then(() => {
-      console.log('Cita eliminada correctamente');
-    })
-    .catch((error) => {
-      console.error('Error al eliminar:', error);
-      alert('No se pudo eliminar la cita');
-    });
+  try {
+    await deleteDoc(doc(db, "citas", id));
+    console.log("✅ Cita eliminada");
+    cargarCitas();
+  } catch (error) {
+    console.error("❌ Error:", error);
+    alert('Error: ' + error.message);
+  }
 }
 
 // ==========================================
-// ELIMINAR MENSAJE
+// CAMBIAR ESTADO
 // ==========================================
 
-function eliminarMensaje(id) {
-  if (!confirm('¿Eliminar este mensaje?')) return;
+async function cambiarEstado(id, estadoActual) {
+  const nuevoEstado = estadoActual === "contactado" ? "pendiente" : "contactado";
   
-  deleteDoc(doc(db, "mensajes", id))
-    .then(() => {
-      console.log("Mensaje eliminado");
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      alert("No se pudo eliminar");
-    });
+  try {
+    await updateDoc(doc(db, "citas", id), { estado: nuevoEstado });
+    console.log("✅ Estado cambiado a:", nuevoEstado);
+    cargarCitas();
+  } catch (error) {
+    console.error("❌ Error:", error);
+    alert('Error: ' + error.message);
+  }
 }
 
 // ==========================================
@@ -109,16 +154,16 @@ function createSolicitudCard(id, data) {
 
   const estado = document.createElement("span");
   estado.className = "badge-estado";
-  estado.textContent = data.estado;
+  estado.textContent = data.estado || "pendiente";
   card.appendChild(estado);
 
   const nombre = document.createElement("h3");
-  nombre.textContent = data.nombre;
+  nombre.textContent = data.nombre || "Sin nombre";
   card.appendChild(nombre);
 
   const interes = document.createElement("p");
   interes.className = "solicitud-servicio";
-  interes.textContent = data.interes;
+  interes.textContent = data.interes || "Sin servicio";
   card.appendChild(interes);
 
   const pago = document.createElement("p");
@@ -128,18 +173,25 @@ function createSolicitudCard(id, data) {
 
   const contacto = document.createElement("p");
   contacto.className = "solicitud-meta";
-  contacto.textContent = `${data.correo} · ${data.telefono}`;
+  contacto.textContent = `${data.correo || ""} · ${data.telefono || ""}`;
   card.appendChild(contacto);
 
   const fecha = document.createElement("p");
   fecha.className = "solicitud-fecha";
-  fecha.textContent = data.creadoEn ? data.creadoEn.toDate().toLocaleString("es-EC") : "";
+  if (data.creadoEn) {
+    if (typeof data.creadoEn.toDate === 'function') {
+      fecha.textContent = data.creadoEn.toDate().toLocaleString("es-EC");
+    } else {
+      fecha.textContent = data.creadoEn;
+    }
+  } else {
+    fecha.textContent = "Fecha no disponible";
+  }
   card.appendChild(fecha);
 
   const actions = document.createElement("div");
   actions.className = "solicitud-actions";
 
-  // Botón WhatsApp
   const whatsappLink = document.createElement("a");
   whatsappLink.className = "btn btn-whatsapp";
   whatsappLink.target = "_blank";
@@ -148,18 +200,13 @@ function createSolicitudCard(id, data) {
   whatsappLink.href = whatsappHref(data);
   actions.appendChild(whatsappLink);
 
-  // Botón toggle estado
   const toggleButton = document.createElement("button");
   toggleButton.className = "btn btn-outline";
   toggleButton.type = "button";
   toggleButton.textContent = data.estado === "contactado" ? "Marcar pendiente" : "Marcar contactado";
-  toggleButton.addEventListener("click", () => {
-    const nuevoEstado = data.estado === "contactado" ? "pendiente" : "contactado";
-    updateDoc(doc(db, "citas", id), { estado: nuevoEstado });
-  });
+  toggleButton.addEventListener("click", () => cambiarEstado(id, data.estado));
   actions.appendChild(toggleButton);
 
-  // 🔥 NUEVO: Botón eliminar
   const deleteButton = document.createElement("button");
   deleteButton.className = "btn btn-danger";
   deleteButton.type = "button";
@@ -175,89 +222,49 @@ function createSolicitudCard(id, data) {
   actions.appendChild(deleteButton);
 
   card.appendChild(actions);
-
   return card;
 }
 
 // ==========================================
-// SUSCRIPCIÓN A CITAS
+// CARGAR CITAS
 // ==========================================
 
-function subscribeCitas() {
-  const citasQuery = query(collection(db, "citas"), orderBy("creadoEn", "desc"));
-
-  unsubscribeCitas = onSnapshot(citasQuery, (snapshot) => {
-    solicitudesGrid.innerHTML = "";
-    panelEmpty.classList.toggle("hidden", !snapshot.empty);
-
-    snapshot.forEach((docSnap) => {
-      solicitudesGrid.appendChild(createSolicitudCard(docSnap.id, docSnap.data()));
-    });
-  });
-}
-
-// ==========================================
-// SUSCRIPCIÓN A MENSAJES (OPCIONAL)
-// ==========================================
-
-function subscribeMensajes() {
-  // Solo si tienes la sección en admin.html
-  const grid = document.getElementById("mensajes-grid");
-  const empty = document.getElementById("mensajes-empty");
+async function cargarCitas() {
+  console.log("🔄 Cargando citas desde Firebase...");
   
-  if (!grid) return; // Si no existe la sección, no hace nada
-  
-  const mensajesQuery = query(collection(db, "mensajes"), orderBy("creadoEn", "desc"));
-  
-  onSnapshot(mensajesQuery, (snapshot) => {
-    grid.innerHTML = '';
-    empty.classList.toggle("hidden", !snapshot.empty);
+  try {
+    const citasRef = collection(db, "citas");
+    const q = query(citasRef, orderBy("creadoEn", "desc"));
+    const querySnapshot = await getDocs(q);
     
-    snapshot.forEach((docSnap) => {
+    console.log("📋 Citas encontradas:", querySnapshot.size);
+    
+    if (solicitudesGrid) solicitudesGrid.innerHTML = "";
+    
+    if (querySnapshot.empty) {
+      if (panelEmpty) panelEmpty.classList.remove("hidden");
+      console.log("⚠️ No hay citas");
+      return;
+    }
+    
+    if (panelEmpty) panelEmpty.classList.add("hidden");
+    
+    querySnapshot.forEach((docSnap) => {
       const data = docSnap.data();
-      const card = document.createElement("article");
-      card.className = "solicitud-card";
-      
-      const nombre = document.createElement("h3");
-      nombre.textContent = data.nombre;
-      card.appendChild(nombre);
-      
-      const correo = document.createElement("p");
-      correo.className = "solicitud-meta";
-      correo.textContent = data.correo;
-      card.appendChild(correo);
-      
-      const telefono = document.createElement("p");
-      telefono.className = "solicitud-meta";
-      telefono.textContent = data.telefono;
-      card.appendChild(telefono);
-      
-      const mensaje = document.createElement("p");
-      mensaje.textContent = data.mensaje;
-      card.appendChild(mensaje);
-      
-      const fecha = document.createElement("p");
-      fecha.className = "solicitud-fecha";
-      fecha.textContent = data.creadoEn?.toDate().toLocaleString('es-EC') || '';
-      card.appendChild(fecha);
-      
-      const btnEliminar = document.createElement("button");
-      btnEliminar.className = "btn btn-danger";
-      btnEliminar.type = "button";
-      btnEliminar.textContent = "🗑️ Eliminar";
-      btnEliminar.style.backgroundColor = "#a3402f";
-      btnEliminar.style.color = "white";
-      btnEliminar.style.border = "none";
-      btnEliminar.style.padding = "10px 16px";
-      btnEliminar.style.borderRadius = "999px";
-      btnEliminar.style.fontWeight = "700";
-      btnEliminar.style.fontSize = "13px";
-      btnEliminar.addEventListener("click", () => eliminarMensaje(docSnap.id));
-      card.appendChild(btnEliminar);
-      
-      grid.appendChild(card);
+      console.log("📄 Procesando:", data.nombre);
+      const card = createSolicitudCard(docSnap.id, data);
+      if (solicitudesGrid) solicitudesGrid.appendChild(card);
     });
-  });
+    
+    console.log("✅ Citas cargadas correctamente");
+    
+  } catch (error) {
+    console.error("❌ ERROR al cargar citas:", error);
+    if (panelEmpty) {
+      panelEmpty.textContent = "❌ Error: " + error.message;
+      panelEmpty.classList.remove("hidden");
+    }
+  }
 }
 
 // ==========================================
@@ -265,21 +272,19 @@ function subscribeMensajes() {
 // ==========================================
 
 onAuthStateChanged(auth, (user) => {
+  console.log("🔐 Estado de autenticación:", user ? "✅ Usuario logueado" : "❌ No logueado");
+  
   if (user) {
-    loginSection.classList.add("hidden");
-    panelSection.classList.remove("hidden");
-    logoutButton.classList.remove("hidden");
-    subscribeCitas();
-    subscribeMensajes(); // Si tienes la sección de mensajes
-    return;
-  }
-
-  loginSection.classList.remove("hidden");
-  panelSection.classList.add("hidden");
-  logoutButton.classList.add("hidden");
-
-  if (unsubscribeCitas) {
-    unsubscribeCitas();
-    unsubscribeCitas = null;
+    console.log("👤 Usuario:", user.email);
+    if (loginSection) loginSection.classList.add("hidden");
+    if (panelSection) panelSection.classList.remove("hidden");
+    if (logoutButton) logoutButton.classList.remove("hidden");
+    cargarCitas();
+  } else {
+    if (loginSection) loginSection.classList.remove("hidden");
+    if (panelSection) panelSection.classList.add("hidden");
+    if (logoutButton) logoutButton.classList.add("hidden");
   }
 });
+
+console.log("✅ Admin panel completamente cargado");

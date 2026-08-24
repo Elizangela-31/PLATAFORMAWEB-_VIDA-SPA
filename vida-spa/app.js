@@ -10,9 +10,8 @@ const $$ = s => document.querySelectorAll(s);
 
 export const CART_KEY = "vidaspa_carrito";
 
-
 // ==========================================
-// SERVICIOS
+// SERVICIOS CON IMÁGENES REALES DE UNSPLASH
 // ==========================================
 
 export const servicios = [
@@ -22,8 +21,8 @@ export const servicios = [
     categoria: "masajes",
     duracion: "60 min",
     precio: 35,
-    imagen: "https://placehold.co/700x520/6b8f71/f3f5f0?text=Masaje+Relajante",
-    descripcion: "Masaje corporal con aceites esenciales para liberar tensión y calmar la mente."
+    imagen: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&h=400&fit=crop&crop=center",
+    descripcion: "Masaje corporal con aceites esenciales para liberar tensión y calmar la mente. Ideal para desconectar del estrés diario."
   },
   {
     id: "masaje-descontracturante",
@@ -31,8 +30,8 @@ export const servicios = [
     categoria: "masajes",
     duracion: "50 min",
     precio: 40,
-    imagen: "https://placehold.co/700x520/26392e/f3f5f0?text=Descontracturante",
-    descripcion: "Técnica de presión profunda enfocada en espalda, cuello y hombros."
+    imagen: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=600&h=400&fit=crop&crop=center",
+    descripcion: "Técnica de presión profunda enfocada en espalda, cuello y hombros. Perfecto para eliminar nudos musculares."
   },
   {
     id: "masaje-piedras",
@@ -40,8 +39,8 @@ export const servicios = [
     categoria: "masajes",
     duracion: "70 min",
     precio: 48,
-    imagen: "https://placehold.co/700x520/b3624a/f3f5f0?text=Piedras+Calientes",
-    descripcion: "Piedras volcánicas templadas que relajan músculos y mejoran la circulación."
+    imagen: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=600&h=400&fit=crop&crop=center",
+    descripcion: "Piedras volcánicas templadas que relajan músculos y mejoran la circulación. Una experiencia única de calor y bienestar."
   },
   {
     id: "limpieza-facial",
@@ -49,8 +48,8 @@ export const servicios = [
     categoria: "facial",
     duracion: "45 min",
     precio: 30,
-    imagen: "https://placehold.co/700x520/a9c2ac/26392e?text=Limpieza+Facial",
-    descripcion: "Exfoliación, extracción e hidratación para un rostro renovado."
+    imagen: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&h=400&fit=crop&crop=center",
+    descripcion: "Exfoliación, extracción e hidratación para un rostro renovado. Tu piel lucirá más radiante y saludable."
   },
   {
     id: "facial-antiedad",
@@ -58,8 +57,8 @@ export const servicios = [
     categoria: "facial",
     duracion: "60 min",
     precio: 45,
-    imagen: "https://placehold.co/700x520/e3b2a2/26392e?text=Ritual+Antiedad",
-    descripcion: "Masaje facial, sérum y mascarilla con activos antiedad y efecto lifting."
+    imagen: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=600&h=400&fit=crop&crop=center",
+    descripcion: "Masaje facial, sérum y mascarilla con activos antiedad y efecto lifting. Recupera la juventud de tu piel."
   },
   {
     id: "hidratacion-facial",
@@ -67,8 +66,8 @@ export const servicios = [
     categoria: "facial",
     duracion: "30 min",
     precio: 22,
-    imagen: "https://placehold.co/700x520/dfe3d8/26392e?text=Hidratacion+Express",
-    descripcion: "Tratamiento rápido de hidratación intensa ideal para pieles resecas.",
+    imagen: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=600&h=400&fit=crop&crop=center",
+    descripcion: "Tratamiento rápido de hidratación intensa ideal para pieles resecas. Resultados visibles al instante."
   },
   {
     id: "exfoliacion-corporal",
@@ -76,8 +75,8 @@ export const servicios = [
     categoria: "corporal",
     duracion: "40 min",
     precio: 32,
-    imagen: "https://placehold.co/700x520/6a6f63/f3f5f0?text=Exfoliacion+Corporal",
-    descripcion: "Exfoliación con sales naturales que renueva y suaviza la piel."
+    imagen: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=600&h=400&fit=crop&crop=center",
+    descripcion: "Exfoliación con sales naturales que renueva y suaviza la piel. Elimina células muertas y revitaliza tu cuerpo."
   },
   {
     id: "envoltura-corporal",
@@ -85,8 +84,8 @@ export const servicios = [
     categoria: "corporal",
     duracion: "60 min",
     precio: 50,
-    imagen: "https://placehold.co/700x520/26392e/e8e2d4?text=Envoltura+Corporal",
-    descripcion: "Envoltura con arcillas activas que reafirma y tonifica la piel."
+    imagen: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&h=400&fit=crop&crop=center",
+    descripcion: "Envoltura con arcillas activas que reafirma y tonifica la piel. Resultados visibles desde la primera sesión."
   },
   {
     id: "manicure-spa",
@@ -94,8 +93,8 @@ export const servicios = [
     categoria: "manos-pies",
     duracion: "45 min",
     precio: 18,
-    imagen: "https://placehold.co/700x520/b3624a/f3f5f0?text=Manicure+Spa",
-    descripcion: "Cuidado completo de manos con exfoliación, masaje y esmaltado."
+    imagen: "https://images.unsplash.com/photo-1610992015732-2449b76344bc?w=600&h=400&fit=crop&crop=center",
+    descripcion: "Cuidado completo de manos con exfoliación, masaje y esmaltado. Tus manos lucirán espectaculares."
   },
   {
     id: "pedicure-spa",
@@ -103,8 +102,8 @@ export const servicios = [
     categoria: "manos-pies",
     duracion: "50 min",
     precio: 22,
-    imagen: "https://placehold.co/700x520/a9c2ac/26392e?text=Pedicure+Spa",
-    descripcion: "Baño de pies, exfoliación, masaje y esmaltado para pies renovados."
+    imagen: "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=600&h=400&fit=crop&crop=center",
+    descripcion: "Baño de pies, exfoliación, masaje y esmaltado para pies renovados. Olvídate del cansancio."
   },
   {
     id: "reflexologia",
@@ -112,8 +111,8 @@ export const servicios = [
     categoria: "manos-pies",
     duracion: "40 min",
     precio: 28,
-    imagen: "https://placehold.co/700x520/e3b2a2/26392e?text=Reflexologia",
-    descripcion: "Presión en puntos específicos del pie para equilibrar cuerpo y mente."
+    imagen: "https://images.unsplash.com/photo-1616671276441-2f2c2a5c9c3e?w=600&h=400&fit=crop&crop=center",
+    descripcion: "Presión en puntos específicos del pie para equilibrar cuerpo y mente. Terapia milenaria con resultados comprobados."
   },
   {
     id: "dia-spa-completo",
@@ -121,11 +120,10 @@ export const servicios = [
     categoria: "corporal",
     duracion: "3 h",
     precio: 95,
-    imagen: "https://placehold.co/700x520/26392e/f3f5f0?text=Dia+de+Spa",
-    descripcion: "Masaje, facial y pedicure en una experiencia completa de bienestar."
+    imagen: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=600&h=400&fit=crop&crop=center",
+    descripcion: "Masaje, facial y pedicure en una experiencia completa de bienestar. El mejor regalo que puedes hacerte."
   }
 ];
-
 
 // ==========================================
 // CARRITO
@@ -156,6 +154,7 @@ function addToCart(servicio) {
     categoria: servicio.categoria,
     duracion: servicio.duracion,
     precio: servicio.precio,
+    imagen: servicio.imagen,
     fecha: "",
     hora: "",
     metodoPago: ""
@@ -167,6 +166,81 @@ function addToCart(servicio) {
   alert(`"${servicio.nombre}" agregado al carrito 🛒`);
 }
 
+// ==========================================
+// MODAL DE DETALLES
+// ==========================================
+
+function crearModal() {
+  if (document.getElementById("servicio-modal")) return;
+
+  const modalHTML = `
+    <div id="servicio-modal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <button class="modal-close" id="modal-close">✕</button>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  document.getElementById("servicio-modal").addEventListener("click", (e) => {
+    if (e.target === e.currentTarget) cerrarModal();
+  });
+
+  document.getElementById("modal-close").addEventListener("click", cerrarModal);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") cerrarModal();
+  });
+}
+
+function abrirModal(servicio) {
+  crearModal();
+
+  const modal = document.getElementById("servicio-modal");
+  const body = document.getElementById("modal-body");
+  
+  body.innerHTML = `
+    <div class="modal-service-image">
+      <img src="${servicio.imagen}" alt="${servicio.nombre}">
+    </div>
+    <div class="modal-service-info">
+      <span class="modal-category">${servicio.categoria.replace("-", " y ")}</span>
+      <h2>${servicio.nombre}</h2>
+      <div class="modal-meta">
+        <span>⏱️ ${servicio.duracion}</span>
+        <span>💰 Desde $${servicio.precio}</span>
+      </div>
+      <p class="modal-description">${servicio.descripcion}</p>
+      <div class="modal-actions">
+        <button class="btn btn-primary add-btn-modal" data-id="${servicio.id}">
+          🛒 Agregar al carrito
+        </button>
+        <button class="btn btn-secondary" onclick="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
+  `;
+
+  body.querySelector(".add-btn-modal")?.addEventListener("click", (e) => {
+    const servicioEncontrado = servicios.find(s => s.id === e.target.dataset.id);
+    if (servicioEncontrado) {
+      addToCart(servicioEncontrado);
+      cerrarModal();
+    }
+  });
+
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function cerrarModal() {
+  const modal = document.getElementById("servicio-modal");
+  if (modal) modal.classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+window.cerrarModal = cerrarModal;
 
 // ==========================================
 // MOSTRAR SERVICIOS
@@ -177,12 +251,15 @@ function showServices(lista = servicios) {
   if (!grid) return;
 
   grid.innerHTML = lista.map(s => `
-    <article class="service-card" data-category="${s.categoria}" data-name="${s.nombre}">
+    <article class="service-card" data-id="${s.id}" data-category="${s.categoria}" data-name="${s.nombre}">
 
       <div class="service-media">
-        <img src="${s.imagen}" alt="${s.nombre}">
+        <img src="${s.imagen}" alt="${s.nombre}" loading="lazy">
         <span class="badge badge-duration">${s.duracion}</span>
         <span class="badge badge-category">${s.categoria.replace("-", " y ")}</span>
+        <div class="service-overlay">
+          <span>👆 Ver detalles</span>
+        </div>
       </div>
 
       <div class="service-body">
@@ -197,7 +274,7 @@ function showServices(lista = servicios) {
 
           <div class="service-actions">
             <button class="btn btn-primary btn-small add-btn" data-id="${s.id}">
-              Agregar
+              Agregar al carrito
             </button>
           </div>
         </div>
@@ -206,9 +283,16 @@ function showServices(lista = servicios) {
     </article>
   `).join("");
 
+  grid.querySelectorAll(".service-card").forEach(card => {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".add-btn")) return;
+      const servicio = servicios.find(s => s.id === card.dataset.id);
+      if (servicio) abrirModal(servicio);
+    });
+  });
+
   $("#service-empty")?.classList.toggle("hidden", lista.length > 0);
 }
-
 
 // ==========================================
 // FILTRAR Y BUSCAR
@@ -230,16 +314,13 @@ function filterServices() {
 $$(".filter-btn").forEach(btn => {
   btn.onclick = () => {
     categoria = btn.dataset.filter;
-
     $$(".filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-
     filterServices();
   };
 });
 
 $("#service-search")?.addEventListener("input", filterServices);
-
 
 // ==========================================
 // BOTÓN AGREGAR
@@ -252,7 +333,6 @@ $("#service-grid")?.addEventListener("click", e => {
   const servicio = servicios.find(s => s.id === boton.dataset.id);
   if (servicio) addToCart(servicio);
 });
-
 
 // ==========================================
 // FORMULARIO DE CONTACTO
@@ -304,7 +384,6 @@ contactForm?.addEventListener("submit", async (e) => {
   }
 });
 
-
 // ==========================================
 // MENÚ
 // ==========================================
@@ -316,12 +395,10 @@ $(".menu-toggle")?.addEventListener("click", () => {
 $$(".nav-link").forEach(link => {
   link.onclick = () => {
     $(".nav-links")?.classList.remove("open");
-
     $$(".nav-link").forEach(l => l.classList.remove("active"));
     link.classList.add("active");
   };
 });
-
 
 // ==========================================
 // INICIO

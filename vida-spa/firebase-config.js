@@ -14,12 +14,13 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.13.2/firebas
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROYECTO.firebaseapp.com",
-  projectId: "TU_PROYECTO",
-  storageBucket: "TU_PROYECTO.firebasestorage.app",
-  messagingSenderId: "TU_SENDER_ID",
-  appId: "TU_APP_ID"
+  apiKey: "AIzaSyD7kugmrzX1_XgSh_-yxMH6_CiZKFz7l7A",
+  authDomain: "vida-spa.firebaseapp.com",
+  projectId: "vida-spa",
+  storageBucket: "vida-spa.firebasestorage.app",
+  messagingSenderId: "702194403355",
+  appId: "1:702194403355:web:090a384a134b9d1fac90be",
+  measurementId: "G-HM4RE8V62X"
 };
 
 const firebaseApp = initializeApp(firebaseConfig);

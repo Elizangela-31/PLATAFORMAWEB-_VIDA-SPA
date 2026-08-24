@@ -8,7 +8,7 @@ import {
 // ================= CONFIGURACIÓN =================
 
 const CART_KEY = "vidaspa_carrito";
-const WHATSAPP = "593999509052";
+const WHATSAPP = "593959509052";
 
 const $ = id => document.getElementById(id);
 

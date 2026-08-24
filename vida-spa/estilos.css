@@ -993,3 +993,12 @@ h1, h2, h3, h4 {
     width: 100%;
   }
 }
+
+.btn-danger {
+  background: #a3402f;
+  color: white;
+  border: none;
+}
+.btn-danger:hover {
+  background: #8a2e1f;
+}

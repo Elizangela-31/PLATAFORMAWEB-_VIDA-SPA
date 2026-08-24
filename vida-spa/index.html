@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIDA SPA | Bienestar y relajación</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+
+<header class="site-header">
+  <nav class="navbar">
+
+    <a class="brand" href="#inicio">
+      <img class="brand-mark" src="https://placehold.co/76x76/26392e/f3f5f0?text=VS" alt="VIDA SPA">
+      <span>VIDA SPA</span>
+    </a>
+
+    <button class="menu-toggle" type="button" aria-label="Abrir menú">
+      <span></span>
+      <span></span>
+    </button>
+
+    <ul class="nav-links">
+      <li><a href="#inicio" class="nav-link active">Inicio</a></li>
+      <li><a href="#servicios" class="nav-link">Servicios</a></li>
+      <li><a href="#contacto" class="nav-link">Contáctanos</a></li>
+
+      <li>
+        <a href="carrito.html" class="nav-link cart-link">
+          🛒 Carrito
+          <span id="cart-count" class="cart-count">0</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="admin.html" class="nav-link nav-cta">
+          Admin
+        </a>
+      </li>
+    </ul>
+
+  </nav>
+</header>
+
+
+<main>
+
+  <!-- INICIO -->
+
+  <section id="inicio" class="hero">
+
+    <div class="hero-content">
+
+      <p class="eyebrow">Spa &amp; bienestar</p>
+
+      <h1>
+        Un espacio para pausar, respirar y reconectar contigo.
+      </h1>
+
+      <p class="hero-text">
+        En VIDA SPA combinamos terapias manuales, rituales faciales y
+        tratamientos corporales para devolverte la calma. Agenda tu cita
+        en minutos y elige cómo prefieres pagar.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#servicios" class="btn btn-primary">
+          Ver servicios
+        </a>
+
+        <a href="#contacto" class="btn btn-secondary">
+          Contáctanos
+        </a>
+      </div>
+
+    </div>
+
+    <div class="hero-media">
+      <img src="https://placehold.co/700x700/a9c2ac/26392e?text=VIDA+SPA" alt="Ambiente de VIDA SPA">
+      <div class="hero-stats">
+        <div>
+          <strong>+8</strong>
+          <span>años de experiencia</span>
+        </div>
+        <div>
+          <strong>12</strong>
+          <span>terapias disponibles</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="wave-divider" aria-hidden="true">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none">
+      <path fill="#e8e2d4" d="M0,32 C240,64 480,0 720,16 C960,32 1200,64 1440,24 L1440,60 L0,60 Z"></path>
+    </svg>
+  </div>
+
+
+  <!-- SERVICIOS -->
+
+  <section id="servicios" class="section section-muted">
+
+    <div class="section-heading">
+      <p class="eyebrow">Nuestros rituales</p>
+      <h2>Servicios disponibles</h2>
+      <p>Elige el tratamiento que buscas, agrégalo al carrito y agenda tu horario ideal.</p>
+    </div>
+
+
+    <div class="catalog-tools">
+
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="todos">Todos</button>
+        <button class="filter-btn" data-filter="masajes">Masajes</button>
+        <button class="filter-btn" data-filter="facial">Facial</button>
+        <button class="filter-btn" data-filter="corporal">Corporal</button>
+        <button class="filter-btn" data-filter="manos-pies">Manos y pies</button>
+      </div>
+
+      <div class="search-bar">
+        <span>⌕</span>
+        <input id="service-search" type="search" placeholder="Buscar servicio...">
+      </div>
+
+    </div>
+
+
+    <p id="service-empty" class="service-empty hidden">
+      No encontramos servicios con ese criterio.
+    </p>
+
+
+    <!-- LOS SERVICIOS LOS GENERA APP.JS -->
+
+    <div id="service-grid" class="service-grid"></div>
+
+  </section>
+
+
+  <!-- BENEFICIOS -->
+
+  <section class="section">
+
+    <div class="section-heading">
+      <p class="eyebrow">Por qué elegirnos</p>
+      <h2>Bienestar pensado para ti</h2>
+    </div>
+
+    <div class="benefit-grid">
+
+      <article class="benefit-card">
+        <span class="icon">🌿</span>
+        <h3>Terapeutas certificados</h3>
+        <p>Equipo capacitado en técnicas manuales y protocolos de spa.</p>
+      </article>
+
+      <article class="benefit-card">
+        <span class="icon">🕯️</span>
+        <h3>Ambiente relajante</h3>
+        <p>Cabinas privadas, aromaterapia y música pensada para desconectar.</p>
+      </article>
+
+      <article class="benefit-card">
+        <span class="icon">📅</span>
+        <h3>Agenda flexible</h3>
+        <p>Elige fecha y horario disponible directamente desde el carrito.</p>
+      </article>
+
+      <article class="benefit-card">
+        <span class="icon">💳</span>
+        <h3>Pago a tu manera</h3>
+        <p>Efectivo, transferencia bancaria o tarjeta, tú decides.</p>
+      </article>
+
+    </div>
+
+  </section>
+
+
+  <!-- CONTACTO -->
+
+  <section id="contacto" class="section section-muted">
+
+    <div class="section-heading">
+      <p class="eyebrow">Hablemos</p>
+      <h2>Contáctanos</h2>
+      <p>¿Tienes dudas sobre un tratamiento? Escríbenos y te respondemos pronto.</p>
+    </div>
+
+    <div class="contact-shell">
+
+      <div class="contact-info">
+        <h3>VIDA SPA</h3>
+        <p>Tu espacio de bienestar en la ciudad.</p>
+
+        <div class="contact-detail">
+          <span class="icon">📍</span>
+          <div>
+            <strong>Dirección</strong>
+            <small>Av. La Colina N32-15 y Whimper, Quito, Ecuador</small>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <span class="icon">🕒</span>
+          <div>
+            <strong>Horario</strong>
+            <small>Martes a domingo, 9:00 - 19:00</small>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <span class="icon">📞</span>
+          <div>
+            <strong>WhatsApp</strong>
+            <small>+593 99 950 9052</small>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <span class="icon">✉️</span>
+          <div>
+            <strong>Correo</strong>
+            <small>hola@vidaspa.com</small>
+          </div>
+        </div>
+      </div>
+
+      <form id="contact-form" class="contact-form" novalidate>
+
+        <label for="contact-nombre">Nombre completo</label>
+        <input id="contact-nombre" type="text" required minlength="2" placeholder="Ej. Ana Torres">
+
+        <label for="contact-correo">Correo electrónico</label>
+        <input id="contact-correo" type="email" required placeholder="correo@ejemplo.com">
+
+        <label for="contact-telefono">Teléfono / WhatsApp</label>
+        <input id="contact-telefono" type="tel" required minlength="7" placeholder="0991234567">
+
+        <label for="contact-mensaje">Mensaje</label>
+        <textarea id="contact-mensaje" rows="4" required minlength="5" placeholder="Cuéntanos qué necesitas..."></textarea>
+
+        <button class="btn btn-primary" type="submit">Enviar mensaje</button>
+        <p id="contact-response" class="form-message" role="status" aria-live="polite"></p>
+
+      </form>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer class="site-footer">
+  <p>© 2026 VIDA SPA · Todos los derechos reservados</p>
+</footer>
+
+
+<script type="module" src="app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Carrito | VIDA SPA</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+
+<header class="site-header">
+  <nav class="navbar">
+
+    <a class="brand" href="index.html">
+      <img class="brand-mark" src="https://placehold.co/76x76/26392e/f3f5f0?text=VS" alt="VIDA SPA">
+      <span>VIDA SPA</span>
+    </a>
+
+    <a class="btn btn-outline" href="index.html#servicios">
+      ← Seguir eligiendo
+    </a>
+
+  </nav>
+</header>
+
+
+<main class="section checkout-page">
+
+  <div class="section-heading checkout-heading">
+    <p class="eyebrow">Resumen de tu cita</p>
+    <h2>🛒 Tu carrito</h2>
+    <p>Elige fecha, horario y método de pago para cada servicio.</p>
+  </div>
+
+
+  <div class="checkout-shell">
+
+    <section>
+
+      <div id="cart-items" class="checkout-items"></div>
+
+      <div id="cart-empty" class="cart-empty hidden">
+        Tu carrito está vacío.
+        <a href="index.html#servicios">
+          <strong>Ver servicios</strong>
+        </a>
+      </div>
+
+    </section>
+
+
+    <aside class="order-summary-panel">
+
+      <h3>Datos de la persona que agenda</h3>
+
+      <form id="checkout-form" class="checkout-form">
+
+        <label for="nombre">Nombre completo</label>
+        <input
+          id="nombre"
+          type="text"
+          required
+          minlength="2"
+          placeholder="Ej. Ana Torres">
+
+
+        <label for="correo">Correo electrónico</label>
+        <input
+          id="correo"
+          type="email"
+          required
+          placeholder="correo@ejemplo.com">
+
+
+        <label for="telefono">Teléfono / WhatsApp</label>
+        <input
+          id="telefono"
+          type="tel"
+          required
+          minlength="7"
+          placeholder="0991234567">
+
+
+        <label for="metodo-pago">Método de pago</label>
+
+        <select id="metodo-pago" required>
+          <option value="">Seleccione una opción</option>
+          <option value="efectivo">Efectivo</option>
+          <option value="transferencia">Transferencia bancaria</option>
+          <option value="tarjeta">Tarjeta</option>
+        </select>
+
+        <div id="payment-panel" class="payment-panel hidden"></div>
+
+      </form>
+
+
+      <div class="summary-lines">
+
+        <div>
+          <span>Servicios seleccionados</span>
+          <strong id="sum-count">0</strong>
+        </div>
+
+      </div>
+
+
+      <div class="grand-total-row">
+        <span>Total a pagar</span>
+        <strong id="cart-total">$0.00</strong>
+      </div>
+
+
+      <p class="cart-note">
+        Los valores son referenciales y se confirman con VIDA SPA.
+      </p>
+
+
+      <button
+        id="checkout-btn"
+        class="btn btn-whatsapp-checkout"
+        type="button">
+
+        Confirmar cita por WhatsApp
+      </button>
+
+
+      <button
+        id="cancel-order-btn"
+        class="btn btn-cancel-order"
+        type="button">
+
+        Cancelar solicitud
+      </button>
+
+
+      <p id="checkout-message" class="form-message"></p>
+
+    </aside>
+
+  </div>
+
+</main>
+
+
+<script type="module" src="carrito.js"></script>
+
+</body>
+</html>

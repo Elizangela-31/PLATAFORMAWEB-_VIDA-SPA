@@ -1,160 +1,305 @@
-<!DOCTYPE html>
-<html lang="es">
+import { db } from "./firebase-config.js";
+import {
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+// ================= CONFIGURACIÓN =================
 
-  <title>Carrito | VIDA SPA</title>
+const CART_KEY = "vidaspa_carrito";
+const WHATSAPP = "593959509052";  // ✅ NÚMERO CORRECTO (sin 0, sin +)
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+const $ = id => document.getElementById(id);
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet">
+const items = $("cart-items");
+const empty = $("cart-empty");
+const totalHTML = $("cart-total");
+const sumCount = $("sum-count");
+const form = $("checkout-form");
+const mensaje = $("checkout-message");
+const confirmar = $("checkout-btn");
+const cancelar = $("cancel-order-btn");
+const metodoPagoSelect = $("metodo-pago");
+const paymentPanel = $("payment-panel");
 
-  <link rel="stylesheet" href="estilos.css">
-</head>
+// ================= CARRITO =================
 
-<body>
+const getCart = () =>
+  JSON.parse(localStorage.getItem(CART_KEY)) || [];
 
-<header class="site-header">
-  <nav class="navbar">
+function saveCart(cart) {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  render();
+}
 
-    <a class="brand" href="index.html">
-      <img class="brand-mark" src="https://placehold.co/76x76/26392e/f3f5f0?text=VS" alt="VIDA SPA">
-      <span>VIDA SPA</span>
-    </a>
+const money = n => `$${Number(n || 0).toFixed(2)}`;
 
-    <a class="btn btn-outline" href="index.html#servicios">
-      ← Seguir eligiendo
-    </a>
+function fechaBonita(fecha) {
+  if (!fecha) return "Por seleccionar";
+  return new Date(`${fecha}T12:00:00`)
+    .toLocaleDateString("es-EC", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric"
+    });
+}
 
-  </nav>
-</header>
+function hoy() {
+  return new Date().toISOString().split("T")[0];
+}
 
+// ================= ACTUALIZAR ITEM =================
 
-<main class="section checkout-page">
+function actualizar(index, campo, valor) {
+  const cart = getCart();
+  const item = cart[index];
+  if (!item) return;
+  if (campo === "fecha") item.fecha = valor;
+  if (campo === "hora") item.hora = valor;
+  saveCart(cart);
+}
 
-  <div class="section-heading checkout-heading">
-    <p class="eyebrow">Resumen de tu cita</p>
-    <h2>🛒 Tu carrito</h2>
-    <p>Elige fecha, horario y método de pago para cada servicio.</p>
-  </div>
+// ================= MOSTRAR CARRITO =================
 
+function render() {
+  const cart = getCart();
+  items.innerHTML = "";
+  empty.classList.toggle("hidden", cart.length > 0);
+  confirmar.disabled = cart.length === 0;
+  cancelar.disabled = cart.length === 0;
 
-  <div class="checkout-shell">
-
-    <section>
-
-      <div id="cart-items" class="checkout-items"></div>
-
-      <div id="cart-empty" class="cart-empty hidden">
-        Tu carrito está vacío.
-        <a href="index.html#servicios">
-          <strong>Ver servicios</strong>
-        </a>
-      </div>
-
-    </section>
-
-
-    <aside class="order-summary-panel">
-
-      <h3>Datos de la persona que agenda</h3>
-
-      <form id="checkout-form" class="checkout-form">
-
-        <label for="nombre">Nombre completo</label>
-        <input
-          id="nombre"
-          type="text"
-          required
-          minlength="2"
-          placeholder="Ej. Ana Torres">
-
-
-        <label for="correo">Correo electrónico</label>
-        <input
-          id="correo"
-          type="email"
-          required
-          placeholder="correo@ejemplo.com">
-
-
-        <label for="telefono">Teléfono / WhatsApp</label>
-        <input
-          id="telefono"
-          type="tel"
-          required
-          minlength="7"
-          placeholder="0991234567">
-
-
-        <label for="metodo-pago">Método de pago</label>
-
-        <select id="metodo-pago" required>
-          <option value="">Seleccione una opción</option>
-          <option value="efectivo">Efectivo</option>
-          <option value="transferencia">Transferencia bancaria</option>
-          <option value="tarjeta">Tarjeta</option>
-        </select>
-
-        <div id="payment-panel" class="payment-panel hidden"></div>
-
-      </form>
-
-
-      <div class="summary-lines">
-
-        <div>
-          <span>Servicios seleccionados</span>
-          <strong id="sum-count">0</strong>
+  cart.forEach((item, index) => {
+    items.innerHTML += `
+      <article class="checkout-item-card">
+        <div class="checkout-item-top">
+          <div>
+            <span class="checkout-type">${item.categoria || "Servicio"}</span>
+            <h3>${item.nombre}</h3>
+            <p>${item.descripcion || ""} · ${item.duracion || ""}</p>
+          </div>
+          <button class="cart-remove" data-index="${index}">✕ Quitar</button>
         </div>
 
+        <div class="cart-edit-grid">
+          <label class="cart-edit-field">
+            <span>📅 Fecha de la cita</span>
+            <input class="cart-date" data-index="${index}" type="date" min="${hoy()}" value="${item.fecha || ""}">
+          </label>
+
+          <label class="cart-edit-field">
+            <span>🕐 Horario</span>
+            <select class="cart-time" data-index="${index}">
+              <option value="">Seleccione</option>
+              <option value="09:00" ${item.hora === "09:00" ? "selected" : ""}>09:00 AM</option>
+              <option value="10:00" ${item.hora === "10:00" ? "selected" : ""}>10:00 AM</option>
+              <option value="11:00" ${item.hora === "11:00" ? "selected" : ""}>11:00 AM</option>
+              <option value="12:00" ${item.hora === "12:00" ? "selected" : ""}>12:00 PM</option>
+              <option value="14:00" ${item.hora === "14:00" ? "selected" : ""}>02:00 PM</option>
+              <option value="15:00" ${item.hora === "15:00" ? "selected" : ""}>03:00 PM</option>
+              <option value="16:00" ${item.hora === "16:00" ? "selected" : ""}>04:00 PM</option>
+              <option value="17:00" ${item.hora === "17:00" ? "selected" : ""}>05:00 PM</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="item-schedule-box">
+          📅 ${fechaBonita(item.fecha)} · 🕒 ${item.hora || "Por seleccionar"}
+        </div>
+
+        <div class="item-total">
+          <span>Precio del servicio</span>
+          <strong>${money(item.precio)}</strong>
+        </div>
+      </article>
+    `;
+  });
+
+  eventos();
+  totales(cart);
+}
+
+// ================= EVENTOS =================
+
+function eventos() {
+  document.querySelectorAll(".cart-date").forEach(input =>
+    input.addEventListener("change", () =>
+      actualizar(+input.dataset.index, "fecha", input.value)
+    )
+  );
+
+  document.querySelectorAll(".cart-time").forEach(select =>
+    select.addEventListener("change", () =>
+      actualizar(+select.dataset.index, "hora", select.value)
+    )
+  );
+
+  document.querySelectorAll(".cart-remove").forEach(btn =>
+    btn.addEventListener("click", () => {
+      const cart = getCart();
+      cart.splice(+btn.dataset.index, 1);
+      saveCart(cart);
+    })
+  );
+}
+
+// ================= TOTALES =================
+
+function totales(cart) {
+  const total = cart.reduce((s, item) => s + Number(item.precio || 0), 0);
+  sumCount.textContent = cart.length;
+  totalHTML.textContent = money(total);
+}
+
+// ================= PANEL DE PAGO =================
+
+function renderPaymentPanel(metodo) {
+  if (!metodo) {
+    paymentPanel.classList.add("hidden");
+    paymentPanel.innerHTML = "";
+    return;
+  }
+
+  paymentPanel.classList.remove("hidden");
+
+  if (metodo === "efectivo") {
+    paymentPanel.innerHTML = `
+      <h4>💵 Pago en efectivo</h4>
+      <p>Paga directamente en recepción el día de tu cita.</p>
+    `;
+    return;
+  }
+
+  if (metodo === "transferencia") {
+    paymentPanel.innerHTML = `
+      <h4>🏦 Transferencia bancaria</h4>
+      <div class="payment-line"><span>Banco</span><strong>Banco Pichincha</strong></div>
+      <div class="payment-line"><span>Cuenta</span><strong>N.º 2200XXXXXX</strong></div>
+      <div class="payment-line"><span>A nombre de</span><strong>VIDA SPA S.A.S.</strong></div>
+      <small>Envía el comprobante por WhatsApp al confirmar.</small>
+    `;
+    return;
+  }
+
+  if (metodo === "tarjeta") {
+    paymentPanel.innerHTML = `
+      <h4>💳 Pago con tarjeta</h4>
+      <p>Simulación de pago con tarjeta.</p>
+      <div class="card-mock-grid">
+        <input class="full" type="text" placeholder="Número de tarjeta" maxlength="19">
+        <input type="text" placeholder="MM/AA" maxlength="5">
+        <input type="text" placeholder="CVV" maxlength="3">
       </div>
+      <small>Formulario de demostración.</small>
+    `;
+    return;
+  }
+}
 
+metodoPagoSelect.addEventListener("change", () => {
+  renderPaymentPanel(metodoPagoSelect.value);
+});
 
-      <div class="grand-total-row">
-        <span>Total a pagar</span>
-        <strong id="cart-total">$0.00</strong>
-      </div>
+// ================= CANCELAR =================
 
+cancelar.addEventListener("click", () => {
+  if (!getCart().length) return;
+  if (confirm("¿Deseas vaciar el carrito?")) {
+    localStorage.removeItem(CART_KEY);
+    location.href = "index.html#servicios";
+  }
+});
 
-      <p class="cart-note">
-        Los valores son referenciales y se confirman con VIDA SPA.
-      </p>
+// ================= CONFIRMAR =================
 
+confirmar.addEventListener("click", async () => {
+  mensaje.textContent = "";
+  mensaje.classList.remove("error");
+  
+  const cart = getCart();
 
-      <button
-        id="checkout-btn"
-        class="btn btn-whatsapp-checkout"
-        type="button">
+  if (!cart.length) {
+    mensaje.textContent = "El carrito está vacío.";
+    mensaje.classList.add("error");
+    return;
+  }
 
-        Confirmar cita por WhatsApp
-      </button>
+  if (cart.some(item => !item.fecha || !item.hora)) {
+    mensaje.textContent = "Selecciona fecha y horario para todos los servicios.";
+    mensaje.classList.add("error");
+    return;
+  }
 
+  if (!form.checkValidity()) {
+    mensaje.textContent = "Completa correctamente tus datos.";
+    mensaje.classList.add("error");
+    form.reportValidity();
+    return;
+  }
 
-      <button
-        id="cancel-order-btn"
-        class="btn btn-cancel-order"
-        type="button">
+  const nombre = $("nombre").value.trim();
+  const correo = $("correo").value.trim();
+  const telefono = $("telefono").value.trim();
+  const metodoPago = metodoPagoSelect.value;
+  const total = cart.reduce((s, item) => s + Number(item.precio || 0), 0);
 
-        Cancelar solicitud
-      </button>
+  confirmar.disabled = true;
+  confirmar.textContent = "Guardando...";
 
+  try {
+    await addDoc(collection(db, "citas"), {
+      nombre,
+      correo,
+      telefono,
+      metodoPago,
+      interes: cart.map(i => i.nombre).join(", "),
+      servicios: cart,
+      total,
+      estado: "pendiente",
+      origen: "carrito",
+      creadoEn: serverTimestamp()
+    });
 
-      <p id="checkout-message" class="form-message"></p>
+    const detalle = cart.map((item, i) => `
+${i + 1}. ${item.nombre}
+   📅 Fecha: ${fechaBonita(item.fecha)}
+   🕐 Hora: ${item.hora}
+   💰 Precio: ${money(item.precio)}
+    `).join("\n");
 
-    </aside>
+    const texto = `Hola VIDA SPA.
 
-  </div>
+Soy ${nombre}.
 
-</main>
+Quiero confirmar mi cita:
 
+${detalle}
 
-<script type="module" src="carrito.js"></script>
+💳 Método de pago: ${metodoPago}
 
-</body>
-</html>
+💰 TOTAL: ${money(total)}
+
+📞 Teléfono: ${telefono}
+✉️ Correo: ${correo}`;
+
+    localStorage.removeItem(CART_KEY);
+    
+    // ✅ REDIRIGIR A WHATSAPP CON EL NÚMERO CORRECTO
+    const urlWhatsApp = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}`;
+    console.log("🔗 Abriendo WhatsApp:", urlWhatsApp);
+    window.location.href = urlWhatsApp;
+
+  } catch (error) {
+    console.error("❌ Error:", error);
+    mensaje.textContent = "❌ No se pudo guardar la solicitud.";
+    mensaje.classList.add("error");
+    confirmar.disabled = false;
+    confirmar.textContent = "Confirmar cita por WhatsApp";
+  }
+});
+
+// ================= INICIO =================
+
+render();
+console.log("✅ Carrito de VIDA SPA cargado");
+console.log(`📱 Número de WhatsApp: +${WHATSAPP}`);

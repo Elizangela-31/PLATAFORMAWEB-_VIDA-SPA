@@ -19,73 +19,139 @@
 
 <body>
 
-  <header class="site-header">
-    <a href="index.html" class="logo">
-      <span class="logo-mark">VS</span>
-      <span class="logo-text">VIDA SPA</span>
+<header class="site-header">
+  <nav class="navbar">
+
+    <a class="brand" href="index.html">
+      <img class="brand-mark" src="https://placehold.co/76x76/26392e/f3f5f0?text=VS" alt="VIDA SPA">
+      <span>VIDA SPA</span>
     </a>
 
-    <a href="index.html#servicios" class="btn btn-outline">← Seguir eligiendo</a>
-  </header>
+    <a class="btn btn-outline" href="index.html#servicios">
+      ← Seguir eligiendo
+    </a>
 
-  <main class="section checkout-page">
+  </nav>
+</header>
 
-    <div class="checkout-shell">
 
-      <section class="checkout-items">
-        <div id="cart-items"></div>
+<main class="section checkout-page">
 
-        <p id="cart-empty" class="hidden">Tu carrito está vacío.</p>
-      </section>
+  <div class="section-heading checkout-heading">
+    <p class="eyebrow">Resumen de tu cita</p>
+    <h2>🛒 Tu carrito</h2>
+    <p>Elige fecha, horario y método de pago para cada servicio.</p>
+  </div>
 
-      <aside class="order-summary-panel">
-        <h2>Datos de la persona que agenda</h2>
 
-        <form id="checkout-form">
-          <label for="nombre">Nombre completo</label>
-          <input id="nombre" type="text" required placeholder="Camila Mendez">
+  <div class="checkout-shell">
 
-          <label for="correo">Correo electrónico</label>
-          <input id="correo" type="email" required placeholder="correo@ejemplo.com">
+    <section>
 
-          <label for="telefono">Teléfono / WhatsApp</label>
-          <input id="telefono" type="tel" required minlength="7" placeholder="0991234567">
+      <div id="cart-items" class="checkout-items"></div>
 
-          <label for="metodo-pago">Método de pago</label>
-          <select id="metodo-pago" required>
-            <option value="">Seleccione una opción</option>
-            <option value="efectivo">Efectivo</option>
-            <option value="transferencia">Transferencia bancaria</option>
-            <option value="tarjeta">Tarjeta</option>
-          </select>
+      <div id="cart-empty" class="cart-empty hidden">
+        Tu carrito está vacío.
+        <a href="index.html#servicios">
+          <strong>Ver servicios</strong>
+        </a>
+      </div>
 
-          <div id="payment-panel" class="payment-panel hidden"></div>
+    </section>
 
-          <div class="checkout-total-row">
-            <span>Servicios</span>
-            <strong id="sum-count">0</strong>
-          </div>
 
-          <div class="checkout-total-row total">
-            <span>Total</span>
-            <strong id="cart-total">$0.00</strong>
-          </div>
+    <aside class="order-summary-panel">
 
-          <p id="checkout-message"></p>
+      <h3>Datos de la persona que agenda</h3>
 
-          <button type="button" id="checkout-btn" class="btn btn-primary" disabled>
-            Confirmar cita por WhatsApp
-          </button>
+      <form id="checkout-form" class="checkout-form">
 
-          <button type="button" id="cancel-order-btn" class="btn btn-outline" disabled>
-            Vaciar carrito
-          </button>
-        </form>
-      </aside>
+        <label for="nombre">Nombre completo</label>
+        <input
+          id="nombre"
+          type="text"
+          required
+          minlength="2"
+          placeholder="Ej. Ana Torres">
 
-    </div>
 
-  </main>
+        <label for="correo">Correo electrónico</label>
+        <input
+          id="correo"
+          type="email"
+          required
+          placeholder="correo@ejemplo.com">
+
+
+        <label for="telefono">Teléfono / WhatsApp</label>
+        <input
+          id="telefono"
+          type="tel"
+          required
+          minlength="7"
+          placeholder="0991234567">
+
+
+        <label for="metodo-pago">Método de pago</label>
+
+        <select id="metodo-pago" required>
+          <option value="">Seleccione una opción</option>
+          <option value="efectivo">Efectivo</option>
+          <option value="transferencia">Transferencia bancaria</option>
+          <option value="tarjeta">Tarjeta</option>
+        </select>
+
+        <div id="payment-panel" class="payment-panel hidden"></div>
+
+      </form>
+
+
+      <div class="summary-lines">
+
+        <div>
+          <span>Servicios seleccionados</span>
+          <strong id="sum-count">0</strong>
+        </div>
+
+      </div>
+
+
+      <div class="grand-total-row">
+        <span>Total a pagar</span>
+        <strong id="cart-total">$0.00</strong>
+      </div>
+
+
+      <p class="cart-note">
+        Los valores son referenciales y se confirman con VIDA SPA.
+      </p>
+
+
+      <button
+        id="checkout-btn"
+        class="btn btn-whatsapp-checkout"
+        type="button">
+
+        Confirmar cita por WhatsApp
+      </button>
+
+
+      <button
+        id="cancel-order-btn"
+        class="btn btn-cancel-order"
+        type="button">
+
+        Cancelar solicitud
+      </button>
+
+
+      <p id="checkout-message" class="form-message"></p>
+
+    </aside>
+
+  </div>
+
+</main>
 
 
 <script type="module" src="carrito.js"></script>
